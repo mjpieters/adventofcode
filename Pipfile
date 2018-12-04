@@ -9,6 +9,7 @@ graphviz = "*"
 numpy = "*"
 pillow = "*"
 matplotlib = "*"
+advent-of-code-data = "*"
 
 [dev-packages]
 

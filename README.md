@@ -4,7 +4,7 @@
 **Twitter**: [@zopatista](https://twitter.com/zopatista)  
 **GitHub**: [mjpieters](https://github.com/mjpieters)  
 
-These are my [Advent of Code][AoC] puzzle solutions.
+These are my [Advent of Code][AoC] (AoC) puzzle solutions.
 
 All solutions use [Python 3.7][pydotorg], and are presented in [Jupyter notebooks][jupyter] for easy [viewing on GitHub][github] or the [online Jupyter notebook viewer][nbviewer].
 
@@ -16,7 +16,7 @@ Everything here is run through Jupyter notebooks. If you check out this reposito
 
 I use [Pipenv][pipenv] to manage dependencies, make sure you [have it installed][pipenv_install] before continuing. Once installed, run
 
-```
+```sh
 $ pipenv install
 $ ./start
 ```
@@ -25,9 +25,17 @@ and the jupyter notebook interface is automatically opened in your default brows
 
 Everything is organised in per-year folders.
 
-## Puzzle input files
+## Puzzle input data
 
-**Note**: I do not include the puzzle inputs, as these are unique to each Advent of Code participant. You can get these trivially by creating your own [Advent of Code][AoC] account, and downloading the puzzle inputs yourself.
+I have started to use Wim Glenn's [`advent-of-code-data` package][aocdata] to load data directly from the AoC website. This library requires your AoC session cookie. You'll have create your own [Advent of Code][AoC] account, then use your browser development tools to retrieve the session cookie value, then store it according to the `advent-of-code-data` instructions. Since this project uses Pipenv, I store it in a `.env` file in the root directory of this project:
+
+```sh
+AOC_SESSION=deadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeaf
+```
+
+Do make sure to restart the jupyter notebook server after updating this file.
+
+For older puzzles that I haven't yet updated, I do not include the puzzle inputs, as these are unique to each Advent of Code participant. You can get these trivially by downloading the puzzle inputs yourself using your own AoC account.
 
 Each puzzle loads input from the relative 'inputs' directory, in the form `inputs/day##.txt`.
 
