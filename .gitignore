@@ -101,3 +101,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# jupyter notebook server logs
+jupyter_notebook.log
