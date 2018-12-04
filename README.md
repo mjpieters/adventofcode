@@ -25,6 +25,10 @@ and the jupyter notebook interface is automatically opened in your default brows
 
 Everything is organised in per-year folders.
 
+## Additional dependencies
+
+* Animations are produced using [matplotlib's animation API][mplanimation], which requires [ffmpeg][ffmpeg] to be installed. On Mac OS X just use `brew install ffmpeg`.
+
 ## Puzzle input data
 
 I have started to use Wim Glenn's [`advent-of-code-data` package][aocdata] to load data directly from the AoC website. This library requires your AoC session cookie. You'll have create your own [Advent of Code][AoC] account, then use your browser development tools to retrieve the session cookie value, then store it according to the `advent-of-code-data` instructions. Since this project uses Pipenv, I store it in a `.env` file in the root directory of this project:
@@ -54,4 +58,6 @@ See the [LICENSE file](LICENSE) in the same directory.
 [nbviewer]: https://nbviewer.jupyter.org/github/mjpieters/adventofcode/tree/master/
 [pipenv]: https://pipenv.readthedocs.io/
 [pipenv_install]: https://pipenv.readthedocs.io/en/latest/install/#installing-pipenv
+[mplanimation]: https://matplotlib.org/api/animation_api.html
+[ffmpeg]: https://www.ffmpeg.org/
 [aocdata]: https://pypi.org/project/advent-of-code-data/
