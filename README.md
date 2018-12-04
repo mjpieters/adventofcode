@@ -31,19 +31,15 @@ Everything is organised in per-year folders.
 
 ## Puzzle input data
 
-I have started to use Wim Glenn's [`advent-of-code-data` package][aocdata] to load data directly from the AoC website. This library requires your AoC session cookie. You'll have create your own [Advent of Code][AoC] account, then use your browser development tools to retrieve the session cookie value, then store it according to the `advent-of-code-data` instructions. Since this project uses Pipenv, I store it in a `.env` file in the root directory of this project:
+I use Wim Glenn's [`advent-of-code-data` package][aocdata] to load data directly from the AoC website. This library requires your AoC session cookie. You'll have create your own [Advent of Code][AoC] account, then use your browser development tools to retrieve the session cookie value. Store the value according to the `advent-of-code-data` instructions (either in `~/.config/aocd/token` or in the `AOC_SESSION` environment variable).
+
+Since this project uses Pipenv, I store it in a `.env` file in the root directory of this project:
 
 ```sh
 AOC_SESSION=deadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeaf
 ```
 
 Do make sure to restart the jupyter notebook server after updating this file.
-
-For older puzzles that I haven't yet updated, I do not include the puzzle inputs, as these are unique to each Advent of Code participant. You can get these trivially by downloading the puzzle inputs yourself using your own AoC account.
-
-Each puzzle loads input from the relative 'inputs' directory, in the form `inputs/day##.txt`.
-
-I may in future start using Wim Glenn's [`advent-of-code-data` package][aocdata] to load data files instead.
 
 ## License
 
