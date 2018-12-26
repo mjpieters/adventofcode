@@ -29,6 +29,8 @@ Everything is organised in per-year folders.
 
 * Animations are produced using [matplotlib's animation API][mplanimation], which requires [ffmpeg][ffmpeg] to be installed. On Mac OS X just use `brew install ffmpeg`.
 
+* Graphs are plotted using [graphviz](http://www.graphviz.org/) command-line tools such as `dot`, `neato`, and `tred`. On Mac OS X, just use `brew install graphviz`.
+
 ## Puzzle input data
 
 I use Wim Glenn's [`advent-of-code-data` package][aocdata] to load data directly from the AoC website. This library requires your AoC session cookie. You'll have create your own [Advent of Code][AoC] account, then use your browser development tools to retrieve the session cookie value. Store the value according to the `advent-of-code-data` instructions (either in `~/.config/aocd/token` or in the `AOC_SESSION` environment variable).
