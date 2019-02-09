@@ -11,6 +11,7 @@ setup(
         "Topic :: Games/Entertainment :: Puzzle Games",
     ],
     install_requires=["advent-of-code-data >= 0.8.0"],
+    python_requires=">= 3.7",
     py_modules=["entrypoint"],
     entry_points={"adventofcode.user": ["martijn = entrypoint:plugin"]},
 )
