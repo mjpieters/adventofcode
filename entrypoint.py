@@ -17,13 +17,20 @@ def blacklisted(cell):
         return True
     if "graphviz" in cell["source"]:
         return True
+    if "plot_license" in cell["source"]:
+        return True
+    if "from IPython.display import Markdown" in cell["source"]:
+        return True
 
 
 def transform(line):
     prefix = (
         "%",  # IPython magics
-        "plot_area(",
-        "visualise(",
+        "plot_area",
+        "visualise",
+        "plot_graph",
+        "plot_execution",
+        "animate",
     )
     if line.startswith(prefix):
         line = "# " + line
