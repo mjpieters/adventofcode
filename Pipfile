@@ -11,6 +11,8 @@ pillow = "*"
 matplotlib = "*"
 advent-of-code-data = "*"
 scipy = "*"
+astor = "*"
+sympy = "*"
 
 [dev-packages]
 

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "9c0420f5be6ae6e0c08b57840243d88878de2f337934d00e5a67efdf4bdd8310"
+            "sha256": "d70311cf901409f2539a89bce8f525e58e82203481c2247e21836c310c849ba0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -30,6 +30,14 @@
             ],
             "markers": "sys_platform == 'darwin'",
             "version": "==0.1.0"
+        },
+        "astor": {
+            "hashes": [
+                "sha256:0e41295809baf43ae8303350e031aff81ae52189b6f881f36d623fa8b2f1960e",
+                "sha256:37a6eed8b371f1228db08234ed7f6cfdc7817a3ed3824797e20cbb11dc2a7862"
+            ],
+            "index": "pypi",
+            "version": "==0.8.0"
         },
         "attrs": {
             "hashes": [
@@ -298,6 +306,12 @@
             ],
             "version": "==0.8.4"
         },
+        "mpmath": {
+            "hashes": [
+                "sha256:fc17abe05fbab3382b61a123c398508183406fa132e0223874578e20946499f6"
+            ],
+            "version": "==1.1.0"
+        },
         "nbconvert": {
             "hashes": [
                 "sha256:21fb48e700b43e82ba0e3142421a659d7739b65568cc832a13976a77be16b523",
@@ -560,6 +574,14 @@
                 "sha256:e2c1c5dee4a1c36bcb790e0fabd5492d874b8ebd4617622c4f6a731701060dda"
             ],
             "version": "==1.9.5"
+        },
+        "sympy": {
+            "hashes": [
+                "sha256:71a11e5686ae7ab6cb8feb5bd2651ef4482f8fd43a7c27e645a165e4353b23e1",
+                "sha256:f9b00ec76151c98470e84f1da2d7d03633180b71fb318428ddccce1c867d3eaa"
+            ],
+            "index": "pypi",
+            "version": "==1.4"
         },
         "termcolor": {
             "hashes": [
