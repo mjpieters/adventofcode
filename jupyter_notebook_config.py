@@ -638,7 +638,7 @@
 ## Glob patterns to hide in file and directory listings.
 c.ContentsManager.hide_globs = [
     '__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*.so', '*.dylib', '*~',
-    'Pipfile*', 'jupyter_notebook*', 'start', 'stop'
+    'Pipfile*', 'jupyter_notebook*', 'start', 'stop', 'mypy.ini'
 ]
 
 ## Python callable or importstring thereof
