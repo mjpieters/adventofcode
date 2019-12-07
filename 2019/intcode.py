@@ -182,13 +182,13 @@ def ioset(
 if __name__ == "__main__":
     test_mem = [1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50]
     cpu = CPU(base_opcodes)
-    cpu.execute(test_mem)
+    cpu.reset(test_mem).execute()
     assert cpu.memory[0] == 3500
 
     def test_jumpcodes(instr: Memory, tests: Mapping[int, int]) -> None:
         for inp, expected in tests.items():
             outputs, test_opcodes = ioset(inp)
-            CPU(test_opcodes).execute(instr)
+            CPU(test_opcodes).reset(instr).execute()
             assert outputs == [expected]
 
     test_tests = (
