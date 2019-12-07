@@ -6,8 +6,10 @@ from functools import partial
 from enum import Enum
 from typing import (
     cast,
+    overload,
     Any,
     Callable,
+    Iterable,
     List,
     Mapping,
     Optional,
@@ -15,6 +17,7 @@ from typing import (
     Sequence,
     Tuple,
     TYPE_CHECKING,
+    Union,
 )
 
 
@@ -131,14 +134,14 @@ class CPU:
     def __getitem__(self, opcode: int) -> BoundInstruction:
         return self.opcodes[opcode % 100].bind(opcode, self)
 
-    def reset(self, memory: Memory = None) -> None:
+    def reset(self, memory: Memory = None) -> CPU:
         if memory is None:
             memory = []
         self.memory = memory[:]
         self.pos: int = 0
+        return self  # allow chaining
 
-    def execute(self, memory: Memory,) -> None:
-        self.reset(memory)
+    def execute(self) -> None:
         mem = self.memory
         try:
             while True:
@@ -160,13 +163,28 @@ base_opcodes = {
 }
 
 
+@overload
 def ioset(
-    *inputs: int, opcodes: Optional[InstructionSet] = None
+    input0: Iterable[int], *inputs: Any, opcodes: Optional[InstructionSet] = None
+) -> Tuple[List[int], InstructionSet]: ...
+@overload
+def ioset(
+    input0: int, *inputs: int, opcodes: Optional[InstructionSet] = None
+) -> Tuple[List[int], InstructionSet]: ...
+def ioset(
+    input0: Union[int, Iterable[int]], *inputs: int, opcodes: Optional[InstructionSet] = None
 ) -> Tuple[List[int], InstructionSet]:
     """Create an output list and instructionset with given input"""
     if opcodes is None:
         opcodes = {}
     outputs: List[int] = []
+    if not inputs and not isinstance(input0, int):
+        # a single input can be an iterable, in which case it provides
+        # all inputs.
+        inputs = cast(Iterable[int], iter(input0))  # type: ignore
+    else:
+        assert isinstance(input0, int)
+        inputs = (input0, *inputs)
     get_input = partial(next, iter(inputs))
     return (
         outputs,
