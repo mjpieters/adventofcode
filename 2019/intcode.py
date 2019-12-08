@@ -68,7 +68,7 @@ class Instruction:
     arg_count: int = 0
     output: bool = False
 
-    def __call__(self, pos: int, *args: int) -> Tuple[int, Any]:
+    def __call__(self, pos: int, *args: Any) -> Tuple[int, Any]:
         """Produce a new CPU position and a result"""
         offset = self.arg_count + int(self.output)
         return pos + 1 + offset, self.f(*args)
