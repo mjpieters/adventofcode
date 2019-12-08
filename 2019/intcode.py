@@ -134,7 +134,7 @@ class CPU:
     def __getitem__(self, opcode: int) -> BoundInstruction:
         return self.opcodes[opcode % 100].bind(opcode, self)
 
-    def reset(self, memory: Memory = None) -> CPU:
+    def reset(self, memory: Optional[Memory] = None) -> CPU:
         if memory is None:
             memory = []
         self.memory = memory[:]
