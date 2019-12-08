@@ -16,11 +16,13 @@ from typing import (
     Protocol,
     Sequence,
     Tuple,
+    TypeVar,
     TYPE_CHECKING,
     Union,
 )
 
 
+T = TypeVar("T", bound="CPU")
 Memory = List[int]
 
 
@@ -134,7 +136,7 @@ class CPU:
     def __getitem__(self, opcode: int) -> BoundInstruction:
         return self.opcodes[opcode % 100].bind(opcode, self)
 
-    def reset(self, memory: Optional[Memory] = None) -> CPU:
+    def reset(self: T, memory: Optional[Memory] = None) -> T:
         if memory is None:
             memory = []
         self.memory = memory[:]
