@@ -166,13 +166,21 @@ base_opcodes = {
 @overload
 def ioset(
     input0: Iterable[int], *inputs: Any, opcodes: Optional[InstructionSet] = None
-) -> Tuple[List[int], InstructionSet]: ...
+) -> Tuple[List[int], InstructionSet]:
+    ...
+
+
 @overload
 def ioset(
     input0: int, *inputs: int, opcodes: Optional[InstructionSet] = None
-) -> Tuple[List[int], InstructionSet]: ...
+) -> Tuple[List[int], InstructionSet]:
+    ...
+
+
 def ioset(
-    input0: Union[int, Iterable[int]], *inputs: int, opcodes: Optional[InstructionSet] = None
+    input0: Union[int, Iterable[int]],
+    *inputs: int,
+    opcodes: Optional[InstructionSet] = None,
 ) -> Tuple[List[int], InstructionSet]:
     """Create an output list and instructionset with given input"""
     if opcodes is None:
