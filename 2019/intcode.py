@@ -4,6 +4,7 @@ import operator
 from dataclasses import dataclass
 from enum import Enum
 from functools import partial
+from operator import getitem
 from typing import (
     cast,
     overload,
@@ -14,7 +15,6 @@ from typing import (
     Mapping,
     Optional,
     Protocol,
-    Sequence,
     Tuple,
     TypeVar,
     TYPE_CHECKING,
@@ -39,24 +39,24 @@ class _ParameterGetter(Protocol):
         ...
 
 
-_getters: Sequence[_ParameterGetter] = [
-    cast(_ParameterGetter, operator.getitem),
-    lambda _, a: a,
-]
 
 
 class ParameterMode(Enum):
-    # modes are an integer (0-9) mapping to a _ParameterGetter definition
-    position = 0
-    immediate = 1
+    # modes are an integer (0-9) mapping to a getter and setter definition
+    position = 0, lambda *a, **kw: getitem(*a)
+    immediate = 1, lambda _, pos, **kw: pos
 
     if TYPE_CHECKING:
         get: _ParameterGetter
 
-    def __new__(cls, value: int) -> ParameterMode:
+    def __new__(
+        cls,
+        value: int,
+        getter: Optional[_ParameterGetter] = None,
+    ) -> ParameterMode:
         mode = object.__new__(cls)
         mode._value_ = value
-        mode.get = _getters[value]
+        mode.get = getter
         return mode
 
 
