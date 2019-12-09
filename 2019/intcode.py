@@ -11,6 +11,7 @@ from typing import (
     overload,
     Any,
     Callable,
+    Dict,
     Iterable,
     List,
     Mapping,
@@ -24,7 +25,7 @@ from typing import (
 
 
 T = TypeVar("T", bound="CPU")
-Memory = List[int]
+Registers = Dict[str, int]
 
 
 class Halt(Exception):
@@ -35,8 +36,46 @@ class Halt(Exception):
         raise cls
 
 
+class Memory(List[int]):
+    def _grow(self, target: int) -> None:
+        assert target + 1 < 2 ** 16, f"Asking for too much memory: {target}"
+        self.extend([0] * (target + 1 - len(self)))
+
+    @overload
+    def __getitem__(self, i: int) -> int:
+        ...
+
+    @overload
+    def __getitem__(self, i: slice) -> List[int]:  # noqa: F811
+        ...
+
+    def __getitem__(self, i):  # noqa: F811
+        try:
+            return super().__getitem__(i)
+        except IndexError:
+            if isinstance(i, int):
+                self._grow(i)
+            return super().__getitem__(i)
+
+    @overload
+    def __setitem__(self, i: int, o: int) -> None:
+        ...
+
+    @overload
+    def __setitem__(self, i: slice, o: Iterable[int]) -> None:  # noqa: F811
+        ...
+
+    def __setitem__(self, i, o) -> None:  # noqa: F811
+        try:
+            super().__setitem__(i, o)
+        except IndexError:
+            if isinstance(i, int):
+                self._grow(i)
+            super().__setitem__(i, o)
+
+
 class _ParameterGetter(Protocol):
-    def __call__(self, memory: Memory, arg: int) -> int:
+    def __call__(self, memory: Memory, pos: int, registers: Registers) -> int:
         ...
 
 
@@ -57,6 +96,15 @@ class ParameterMode(Enum):
     # immediate mode should only ever be used as a getter; if used as a setter
     # anyway, Halt is raised.
     immediate = (1, lambda _, pos, **kw: pos, lambda *a, **kw: Halt.halt)
+    relative = (
+        2,
+        lambda mem, pos, *, registers, **kw: getitem(
+            mem, pos + registers["relative base"]
+        ),
+        lambda mem, pos, value, *, registers, **kw: setitem(
+            mem, pos + registers["relative base"], value
+        ),
+    )
 
     if TYPE_CHECKING:
         get: _ParameterGetter
@@ -85,7 +133,7 @@ class _InstructionBaseFields:
 class InstructionBase(ABC, _InstructionBaseFields):
     @abstractmethod
     def __call__(
-        self, pos: int, *args: Any, **kwargs: Any
+        self, pos: int, *args: Any, registers: Registers, **kwargs: Any
     ) -> Tuple[int, Any]:
         """Produce a new CPU position and a result"""
         raise NotImplementedError()
@@ -109,6 +157,19 @@ class CallableInstructionBase:
 
     # takes InstructionBase.arg_count integers
     f: Callable[..., Any]
+
+
+@dataclass
+class AdjustRelativeBaseInstruction(InstructionBase):
+    """Adjust the 'relative base' register, by adding the single argument"""
+
+    arg_count: int = 1
+
+    def __call__(
+        self, pos: int, *args: int, registers: Registers, **kwargs: Any
+    ) -> Tuple[int, Any]:
+        registers["relative base"] += args[0]
+        return pos + 1 + self.arg_count + int(self.output), None
 
 
 @dataclass
@@ -136,20 +197,21 @@ class BoundInstruction:
     cpu: CPU
 
     def __call__(self) -> int:
-        mem, pos, instr = (
+        mem, pos, registers, instr = (
             self.cpu.memory,
             self.cpu.pos,
+            self.cpu.registers,
             self.instruction,
         )
         # apply each parameter mode to the memory values
         args = (
-            param.get(mem, mem[i])
+            param.get(mem, mem[i], registers=registers)
             for i, param in enumerate(self.modes[: instr.arg_count], start=self.offset)
         )
-        newpos, result = instr(pos, *args)
+        newpos, result = instr(pos, *args, registers=registers)
         if instr.output:
             target = mem[self.offset + instr.arg_count]
-            self.modes[-1].set(mem, target, int(result))
+            self.modes[-1].set(mem, target, int(result), registers=registers)
         return newpos
 
 
@@ -160,6 +222,7 @@ class CPU:
     memory: Memory
     pos: int
     opcodes: InstructionSet
+    registers: Registers
 
     def __init__(self, opcodes: InstructionSet) -> None:
         self.opcodes = opcodes
@@ -167,11 +230,12 @@ class CPU:
     def __getitem__(self, opcode: int) -> BoundInstruction:
         return self.opcodes[opcode % 100].bind(opcode, self)
 
-    def reset(self: T, memory: Optional[Memory] = None) -> T:
+    def reset(self: T, memory: Optional[Union[List, Memory]] = None) -> T:
         if memory is None:
-            memory = []
-        self.memory = memory[:]
+            memory = Memory()
+        self.memory = Memory(memory)
         self.pos: int = 0
+        self.registers = {"relative base": 0}
         return self  # allow chaining
 
     def execute(self) -> None:
@@ -192,6 +256,7 @@ base_opcodes = {
     6: JumpInstruction(operator.not_, 2),
     7: Instruction(operator.lt, 2, True),
     8: Instruction(operator.eq, 2, True),
+    9: AdjustRelativeBaseInstruction(),
     99: Instruction(Halt.halt),
 }
 
@@ -241,7 +306,7 @@ if __name__ == "__main__":
     cpu.reset(test_mem).execute()
     assert cpu.memory[0] == 3500
 
-    def test_jumpcodes(instr: Memory, tests: Mapping[int, int]) -> None:
+    def test_jumpcodes(instr: List[int], tests: Mapping[int, int]) -> None:
         for inp, expected in tests.items():
             outputs, test_opcodes = ioset(inp)
             CPU(test_opcodes).reset(instr).execute()
@@ -312,3 +377,23 @@ if __name__ == "__main__":
     )
     for test in test_tests:
         test_jumpcodes(*test)
+
+    outputs, test_opcodes = ioset()
+    cpu = CPU(test_opcodes)
+
+    quine = [109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99]
+    cpu.reset(quine).execute()
+    assert outputs == quine
+
+    outputs[:] = []
+    large_num = [1102, 34915192, 34915192, 7, 4, 7, 99, 0]
+    cpu.reset(large_num).execute()
+    assert outputs == [large_num[1] * large_num[2]]
+
+    large_num_1 = [1102, 34915192, 34915192, 7, 4, 7, 99, 0]
+    cpu.reset(large_num_1).execute()
+    assert outputs[-1] == large_num[1] * large_num[2]
+
+    large_num_2 = [104, 1125899906842624, 99]
+    cpu.reset(large_num_2).execute()
+    assert outputs[-1] == large_num_2[1]
