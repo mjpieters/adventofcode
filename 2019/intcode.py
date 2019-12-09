@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import operator
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 from functools import partial
@@ -75,17 +76,19 @@ class ParameterMode(Enum):
 
 
 @dataclass
-class Instruction:
-    # the inputs are processed by a function that operates on arg_count integers
-    f: Callable[..., Any]
+class _InstructionBaseFields:
     # An opcode takes N parameters, consisting of M arguments and an optional output
     arg_count: int = 0
     output: bool = False
 
-    def __call__(self, pos: int, *args: Any) -> Tuple[int, Any]:
+
+class InstructionBase(ABC, _InstructionBaseFields):
+    @abstractmethod
+    def __call__(
+        self, pos: int, *args: Any, **kwargs: Any
+    ) -> Tuple[int, Any]:
         """Produce a new CPU position and a result"""
-        offset = self.arg_count + int(self.output)
-        return pos + 1 + offset, self.f(*args)
+        raise NotImplementedError()
 
     def bind(self, opcode: int, cpu: CPU) -> BoundInstruction:
         # assumption: on binding, cpu.pos points to the position in memory
@@ -101,17 +104,32 @@ class Instruction:
 
 
 @dataclass
+class CallableInstructionBase:
+    """Instruction mixin that accepts a callable to delegate instruction handling to"""
+
+    # takes InstructionBase.arg_count integers
+    f: Callable[..., Any]
+
+
+@dataclass
+class Instruction(InstructionBase, CallableInstructionBase):
+    def __call__(self, pos: int, *args: Any, **kwargs: Any) -> Tuple[int, Any]:
+        """Produce a new CPU position and a result"""
+        pos += 1 + self.arg_count + int(self.output)
+        return pos, self.f(*args)
+
+
 class JumpInstruction(Instruction):
-    def __call__(self, pos: int, *args: int) -> Tuple[int, Any]:
+    def __call__(self, pos: int, *args: int, **kwargs: Any) -> Tuple[int, Any]:
         """Use last argument as jump target if result is true-ish"""
         *jmpargs, jump_to = args
-        offset, result = super().__call__(pos, *jmpargs)
-        return jump_to if result else offset, result
+        pos, result = super().__call__(pos, *jmpargs)
+        return jump_to if result else pos, result
 
 
 @dataclass
 class BoundInstruction:
-    instruction: Instruction
+    instruction: InstructionBase
     modes: Tuple[ParameterMode, ...]
     # where to read the arg values from
     offset: int
@@ -135,7 +153,7 @@ class BoundInstruction:
         return newpos
 
 
-InstructionSet = Mapping[int, Instruction]
+InstructionSet = Mapping[int, InstructionBase]
 
 
 class CPU:
