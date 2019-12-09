@@ -198,34 +198,31 @@ base_opcodes = {
 
 @overload
 def ioset(
-    input0: Iterable[int], *inputs: Any, opcodes: Optional[InstructionSet] = None
+    *inputs: Iterable[int], opcodes: Optional[InstructionSet] = None
 ) -> Tuple[List[int], InstructionSet]:
     ...
 
 
 @overload
 def ioset(
-    input0: int, *inputs: int, opcodes: Optional[InstructionSet] = None
+    *inputs: int, opcodes: Optional[InstructionSet] = None
 ) -> Tuple[List[int], InstructionSet]:
     ...
 
 
 def ioset(
-    input0: Union[int, Iterable[int]],
-    *inputs: int,
-    opcodes: Optional[InstructionSet] = None,
+    *inputs: Union[int, Iterable[int]], opcodes: Optional[InstructionSet] = None,
 ) -> Tuple[List[int], InstructionSet]:
     """Create an output list and instructionset with given input"""
     if opcodes is None:
         opcodes = {}
     outputs: List[int] = []
-    if not inputs and not isinstance(input0, int):
+    if len(inputs) == 1 and not isinstance(inputs[0], int):
         # a single input can be an iterable, in which case it provides
         # all inputs.
-        inputs = cast(Iterable[int], iter(input0))  # type: ignore
+        inputs = cast(Iterable[int], iter(inputs[0]))  # type: ignore
     else:
-        assert isinstance(input0, int)
-        inputs = (input0, *inputs)
+        assert all(isinstance(i, int) for i in inputs)
     get_input = partial(next, iter(inputs))
     return (
         outputs,
