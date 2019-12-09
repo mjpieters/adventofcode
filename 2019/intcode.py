@@ -4,7 +4,7 @@ import operator
 from dataclasses import dataclass
 from enum import Enum
 from functools import partial
-from operator import getitem
+from operator import getitem, setitem
 from typing import (
     cast,
     overload,
@@ -39,24 +39,38 @@ class _ParameterGetter(Protocol):
         ...
 
 
+class _ParameterSetter(Protocol):
+    def __call__(
+        self, memory: Memory, pos: int, value: int, registers: Registers
+    ) -> None:
+        ...
 
 
 class ParameterMode(Enum):
     # modes are an integer (0-9) mapping to a getter and setter definition
-    position = 0, lambda *a, **kw: getitem(*a)
-    immediate = 1, lambda _, pos, **kw: pos
+    position = (
+        0,
+        lambda *a, **kw: getitem(*a),
+        lambda *a, **kw: setitem(*a),
+    )
+    # immediate mode should only ever be used as a getter; if used as a setter
+    # anyway, Halt is raised.
+    immediate = (1, lambda _, pos, **kw: pos, lambda *a, **kw: Halt.halt)
 
     if TYPE_CHECKING:
         get: _ParameterGetter
+        set: _ParameterSetter
 
     def __new__(
         cls,
         value: int,
         getter: Optional[_ParameterGetter] = None,
+        setter: Optional[_ParameterSetter] = None,
     ) -> ParameterMode:
         mode = object.__new__(cls)
         mode._value_ = value
         mode.get = getter
+        mode.set = setter
         return mode
 
 
@@ -76,12 +90,11 @@ class Instruction:
     def bind(self, opcode: int, cpu: CPU) -> BoundInstruction:
         # assumption: on binding, cpu.pos points to the position in memory
         # for our opcode.
+        paramcount = self.arg_count + int(self.output)
         modes = opcode // 100
         return BoundInstruction(
             self,
-            tuple(
-                ParameterMode(modes // (10 ** i) % 10) for i in range(self.arg_count)
-            ),
+            tuple(ParameterMode(modes // (10 ** i) % 10) for i in range(paramcount)),
             cpu.pos + 1,
             cpu,
         )
@@ -113,12 +126,12 @@ class BoundInstruction:
         # apply each parameter mode to the memory values
         args = (
             param.get(mem, mem[i])
-            for i, param in enumerate(self.modes, start=self.offset)
+            for i, param in enumerate(self.modes[: instr.arg_count], start=self.offset)
         )
         newpos, result = instr(pos, *args)
         if instr.output:
             target = mem[self.offset + instr.arg_count]
-            mem[target] = int(result)
+            self.modes[-1].set(mem, target, int(result))
         return newpos
 
 
