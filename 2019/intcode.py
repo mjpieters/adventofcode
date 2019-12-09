@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import operator
 from dataclasses import dataclass
-from functools import partial
 from enum import Enum
+from functools import partial
 from typing import (
     cast,
     overload,
