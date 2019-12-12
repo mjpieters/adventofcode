@@ -43,6 +43,12 @@ AOC_SESSION=deadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeaf
 
 Do make sure to restart the jupyter notebook server after updating this file.
 
+## 2015 and 2016 solutions
+
+The 2015 and 2016 solutions are not IPython notebooks; they pre-date this repository, but were added later, and have not been updated or tested to work still. These don't use the `advent-of-code-data` library either so you need to download inputs manually for these.
+
+They are included purely for completion's sake.
+
 ## License
 
 See the [LICENSE file](LICENSE) in the same directory.
