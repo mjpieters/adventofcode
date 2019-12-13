@@ -13,6 +13,7 @@ advent-of-code-data = "*"
 scipy = "*"
 astor = "*"
 sympy = "*"
+requests = "*"
 
 [dev-packages]
 black = "==19.10b0"
