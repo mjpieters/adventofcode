@@ -6,7 +6,7 @@
 
 These are my [Advent of Code][AoC] (AoC) puzzle solutions.
 
-All solutions use [Python 3.8][pydotorg], and are presented in [Jupyter notebooks][jupyter] for easy [viewing on GitHub][github] or the [online Jupyter notebook viewer][nbviewer].
+Most recent solutions use [Python 3.9][pydotorg], and are presented in [Jupyter notebooks][jupyter] for easy [viewing on GitHub][github] or the [online Jupyter notebook viewer][nbviewer].
 
 I don't aim to be first on any leaderboard. I aim to have fun solving the coding puzzles and playing with the concepts, and I try to include explanations of my thinking in the notebooks. Sometimes that means I'll include an animation or graph to show off some aspect of the puzzle.
 
@@ -23,7 +23,7 @@ $ ./start
 
 and the jupyter notebook interface is automatically opened in your default browser. You can stop the server with the *Quit* button in the web interface, or with the `./stop` script.
 
-Everything is organised in per-year folders.
+Everything is organised in per-year folders. I tend to update all the libraries and Python release each year, but I don't test if these updates caused issues with solutions for preceding years. If something broke, so be it.
 
 ## Additional dependencies
 
