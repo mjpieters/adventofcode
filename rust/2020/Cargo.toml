@@ -10,3 +10,4 @@ bench = false
 [dependencies]
 aoc-runner = "0.3.0"
 aoc-runner-derive = "0.3.0"
+bit-set = "0.5.2"
