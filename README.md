@@ -49,6 +49,14 @@ The 2015 and 2016 solutions are not IPython notebooks; they pre-date this reposi
 
 They are included purely for completion's sake.
 
+## Rust solutions
+
+I'm trying out implementing solutions in Rust as well. I can't promise I'm going to keep this up or that I'll implement Rust versions of all solutions.
+
+I'm using the [cargo-aoc project](https://lib.rs/crates/cargo-aoc) as the runner; you'll need to run `cargo install cargo-aoc` to install it. Then, set your AoC credentials (`cargo aoc credentials -p ...`), move your working directory to a specific year (`cd rust/<year>`, fetch inputs `cargo aoc input -y <year> -d <day>` and you can run the solution for that day with `cargo aoc -d <day>`.
+
+Like with my Python solutions, I did not include my own puzzle inputs in the repository.
+
 ## License
 
 See the [LICENSE file](LICENSE) in the same directory.
