@@ -1,0 +1,14 @@
+[package]
+name = "aoc_rust_2018"
+version = "0.1.0"
+authors = ["Martijn Pieters <mj@zopatista.com>"]
+edition = "2018"
+
+[lib]
+bench = false
+
+[dependencies]
+aoc-runner = "0.3.0"
+aoc-runner-derive = "0.3.0"
+counter = "0.5.2"
+sequence_trie = "0.3.6"
