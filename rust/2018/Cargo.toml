@@ -11,4 +11,7 @@ bench = false
 aoc-runner = "0.3.0"
 aoc-runner-derive = "0.3.0"
 counter = "0.5.2"
+lazy_static = "1.4.0"
+ranges = "0.3.1"
+regex = "1.4.2"
 sequence_trie = "0.3.6"
