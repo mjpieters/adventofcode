@@ -16,6 +16,7 @@ astor = "*"
 sympy = "*"
 regex = "*"
 requests = "*"
+easing-functions = "*"
 
 [dev-packages]
 black = "==20.8b1"
