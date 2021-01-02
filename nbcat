@@ -4,5 +4,5 @@ cat -n <(
     --to python --stdout \
     --PythonExporter.exclude_markdown=True \
     --PythonExporter.exclude_input_prompt=True \
-    --TagRemovePreprocessor.remove_cell_tags='{"noexport"}'\
+    --TagRemovePreprocessor.remove_cell_tags=noexport \
 )
