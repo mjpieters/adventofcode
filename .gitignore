@@ -1,5 +1,6 @@
 */inputs/
 
+rust/input/
 rust/*/input/
 rust/*/target/
 rust/*/Cargo.lock
