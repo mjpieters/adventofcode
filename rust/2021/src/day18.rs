@@ -277,17 +277,19 @@ impl<'s, 't> Add<&'t SnailfishNumber> for &'s SnailfishNumber {
         let mut overflow = 0;
 
         let mut explode = |btree: &mut [i8; 32], node, l1, l2, pqueue: &mut BinaryHeap<_>| {
-            // two new leaves outside the tree, update preceding, succeeding, and
-            // parent; the preceding and succeeding nodes are pushed onto the queue.
-            // overflow only applies to the initial copy phase, when exploding
-            // can push values to a successor at an index > 32
+            // two new leaves outside the tree, update preceding, succeeding,
+            // and parent; the preceding and succeeding nodes are pushed onto
+            // the queue, if they need splitting. overflow only applies to the
+            // initial copy phase, when exploding can push values to a successor
+            // at an index > 32
             btree[node >> 1] = 0_i8;
-            let l1 = l1 + overflow;
-            overflow = 0;
 
             if let Some(prev) = find_sibling(btree, node, Dir::Left) {
-                btree[prev] += l1;
-                pqueue.push(QueuedNode::from(prev));
+                btree[prev] += l1 + overflow;
+                overflow = 0;
+                if btree[prev] > 9 {
+                    pqueue.push(QueuedNode::from(prev));
+                }
             };
             if let Some(next) = find_sibling(btree, node + Dir::Right, Dir::Right) {
                 if next > 32 {
@@ -296,7 +298,9 @@ impl<'s, 't> Add<&'t SnailfishNumber> for &'s SnailfishNumber {
                     return;
                 }
                 btree[next] += l2;
-                pqueue.push(QueuedNode::from(next));
+                if btree[next] > 9 {
+                    pqueue.push(QueuedNode::from(next));
+                }
             };
         };
 
@@ -338,13 +342,11 @@ impl<'s, 't> Add<&'t SnailfishNumber> for &'s SnailfishNumber {
             }
         }
 
-        // repeat:
-        // - find values over 9, split
-        // - if split added leaves at level 5, explode
+        // for each entry in the queue:
+        // - re-verify that it is still over 9, then split
+        // - if split added leaves at level 5, explode (which will queue as needed)
         // - if split values are large enough to need splitting again, add
         //   their nodes to the queue for further checks
-        // - add exploded values to start of queue to check for splits
-        // we start the queue with all qualifying leaf nodes
         while let Some(node) = pqueue.pop() {
             let node = usize::from(node);
             let value = btree[node];
