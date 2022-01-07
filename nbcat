@@ -1,8 +1,19 @@
 #!/bin/bash
-cat -n <( 
+if [ $# -eq 2 ] && [ "$1" == '-l' ]; then
+    lineno=true
+    shift
+fi    
+
+SOURCE="$(
     jupyter nbconvert "$1" \
-    --to python --stdout \
+    --to python --stdout --log-level=50 \
     --PythonExporter.exclude_markdown=True \
     --PythonExporter.exclude_input_prompt=True \
     --TagRemovePreprocessor.remove_cell_tags=noexport \
-)
+)"
+
+if [[ $lineno ]]; then
+    cat -n <(echo "$SOURCE")
+else
+    echo "$SOURCE"
+fi
