@@ -19,7 +19,7 @@ requests = "*"
 easing-functions = "*"
 
 [dev-packages]
-black = "==21.11b1"
+black = "==21.12b0"
 flake8 = "*"
 flake8-bugbear = "*"
 mypy = "*"
