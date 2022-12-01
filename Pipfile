@@ -19,10 +19,10 @@ requests = "*"
 easing-functions = "*"
 
 [dev-packages]
-black = "==21.12b0"
+black = "*"
 flake8 = "*"
 flake8-bugbear = "*"
 mypy = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"
