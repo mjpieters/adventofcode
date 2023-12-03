@@ -27,10 +27,17 @@ easing-functions = "*"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "*"
-flake8 = "*"
-flake8-bugbear = "*"
 mypy = "*"
+ruff = "^0.1.6"
+
+
+[tool.ruff]
+extend-include = ["*.ipynb"]
+ignore = ["E402", "E501"]
+unfixable = ["B"]
+line-length = 88
+select = ["B", "E", "F", "W", "B9"]
+
 
 [build-system]
 requires = ["poetry-core"]
