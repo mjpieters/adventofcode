@@ -6,7 +6,7 @@
 
 These are my [Advent of Code][AoC] (AoC) puzzle solutions.
 
-Most recent solutions use [Python 3.11][pydotorg], and are presented in [Jupyter notebooks][jupyter] for easy [viewing on GitHub][github] or the [online Jupyter notebook viewer][nbviewer].
+Most recent solutions use [Python 3.12][pydotorg], and are presented in [Jupyter notebooks][jupyter] for easy [viewing on GitHub][github] or the [online Jupyter notebook viewer][nbviewer].
 
 I don't aim to be first on any leaderboard. I aim to have fun solving the coding puzzles and playing with the concepts, and I try to include explanations of my thinking in the notebooks. Sometimes that means I'll include an animation or graph to show off some aspect of the puzzle.
 
@@ -35,7 +35,7 @@ Everything is organised in per-year folders. I tend to update all the libraries 
 
 I use Wim Glenn's [`advent-of-code-data` package][aocdata] to load data directly from the AoC website. This library requires your AoC session cookie. You'll have create your own [Advent of Code][AoC] account, then use your browser development tools to retrieve the session cookie value. Store the value according to the `advent-of-code-data` instructions (either in `~/.config/aocd/token` or in the `AOC_SESSION` environment variable).
 
-Since this project uses Pipenv, I store it in a `.env` file in the root directory of this project:
+Since this project uses poetry, I use [poetry-dotenv-plugin][] and I store the session cookie in a `.env` file in the root directory of this project:
 
 ```sh
 AOC_SESSION=deadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeafdeadbeaf
@@ -73,3 +73,4 @@ See the [LICENSE file](LICENSE) in the same directory.
 [mplanimation]: https://matplotlib.org/api/animation_api.html
 [ffmpeg]: https://www.ffmpeg.org/
 [aocdata]: https://pypi.org/project/advent-of-code-data/
+[poetry-dotenv-plugin]: https://github.com/mpeteuil/poetry-dotenv-plugin
