@@ -1,2 +1,2 @@
 #!/bin/bash
-pipenv run jupyter notebook stop
+poetry run jupyter notebook stop

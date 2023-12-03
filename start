@@ -2,4 +2,4 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 LOG="$DIR/jupyter_notebook.log"
 CONFIG="$DIR/jupyter_notebook_config.py"
-pipenv run nohup jupyter notebook --config="$CONFIG" 1>/dev/null 2>> "$LOG" &
+poetry run nohup jupyter notebook --config="$CONFIG" 1>/dev/null 2>> "$LOG" &
