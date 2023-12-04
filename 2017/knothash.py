@@ -3,6 +3,7 @@ from functools import reduce
 from itertools import chain, repeat
 from operator import xor
 
+
 def knot_hash_rounds(lenghts, size=256, rounds=64):
     string = deque(range(size), size)
     skip = pos = 0
@@ -18,5 +19,6 @@ def knot_hash(value, _suffix=bytes([17, 31, 73, 47, 23])):
     sparse_hash = knot_hash_rounds(value + _suffix)
     dense_hash = bytes(
         reduce(xor, (sparse_hash[b] for b in range(i, i + 16)))
-        for i in range(0, 256, 16))
+        for i in range(0, 256, 16)
+    )
     return dense_hash.hex()
