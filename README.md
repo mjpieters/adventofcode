@@ -6,7 +6,7 @@
 
 These are my [Advent of Code][AoC] (AoC) puzzle solutions.
 
-Most recent solutions use [Python 3.12][pydotorg], and are presented in [Jupyter notebooks][jupyter] for easy [viewing on GitHub][github] or the [online Jupyter notebook viewer][nbviewer].
+Most recent solutions use [Python 3.12][pydotorg], and are presented in [Jupyter notebooks][jupyter] for easy [viewing on GitHub][github] or the [online Jupyter notebook viewer][nbviewer]. The latter is the better viewer, especially as Github's notebook rendered often breaks or at the very least filters out a lot of the interesting bits like animations.
 
 I don't aim to be first on any leaderboard. I aim to have fun solving the coding puzzles and playing with the concepts, and I try to include explanations of my thinking in the notebooks. Sometimes that means I'll include an animation or graph to show off some aspect of the puzzle.
 
