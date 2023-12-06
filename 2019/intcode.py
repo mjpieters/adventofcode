@@ -45,10 +45,10 @@ class Memory(List[int]):
         ...
 
     @overload
-    def __getitem__(self, i: slice) -> List[int]:  # noqa: F811
+    def __getitem__(self, i: slice) -> List[int]:
         ...
 
-    def __getitem__(self, i):  # noqa: F811
+    def __getitem__(self, i):
         try:
             return super().__getitem__(i)
         except IndexError:
@@ -61,10 +61,10 @@ class Memory(List[int]):
         ...
 
     @overload
-    def __setitem__(self, i: slice, o: Iterable[int]) -> None:  # noqa: F811
+    def __setitem__(self, i: slice, o: Iterable[int]) -> None:
         ...
 
-    def __setitem__(self, i, o) -> None:  # noqa: F811
+    def __setitem__(self, i, o) -> None:
         try:
             super().__setitem__(i, o)
         except IndexError:
