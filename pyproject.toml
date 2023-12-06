@@ -33,6 +33,7 @@ ruff = "^0.1.6"
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
+extend-exclude = ["jupyter_notebook_config.py", "2015/", "2016/"]
 ignore = ["E402", "E501"]
 unfixable = ["B"]
 line-length = 88
