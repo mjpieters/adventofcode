@@ -48,7 +48,7 @@ class Memory(List[int]):
     def __getitem__(self, i: slice) -> List[int]:
         ...
 
-    def __getitem__(self, i):
+    def __getitem__(self, i):  # pyright: ignore[reportIncompatibleMethodOverride]
         try:
             return super().__getitem__(i)
         except IndexError:
@@ -64,7 +64,7 @@ class Memory(List[int]):
     def __setitem__(self, i: slice, o: Iterable[int]) -> None:
         ...
 
-    def __setitem__(self, i, o) -> None:
+    def __setitem__(self, i, o) -> None:  # pyright: ignore[reportIncompatibleMethodOverride]
         try:
             super().__setitem__(i, o)
         except IndexError:
@@ -117,6 +117,7 @@ class ParameterMode(Enum):
     ) -> ParameterMode:
         mode = object.__new__(cls)
         mode._value_ = value
+        assert getter is not None and setter is not None
         mode.get = getter
         mode.set = setter
         return mode

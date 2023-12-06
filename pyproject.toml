@@ -44,6 +44,11 @@ select = ["B", "E", "F", "W", "B9"]
 include = ["."]
 exclude = ["2015", "2016"]
 ignore = ["jupyter_notebook_config.py"]
+# pyright 1.1.339 "standard" mode, manually applied until pylance includes that version
+reportFunctionMemberAccess = "error"
+reportIncompatibleMethodOverride = "error"
+reportIncompatibleVariableOverride = "error"
+reportOverlappingOverload = "error"
 
 
 [build-system]
