@@ -7,8 +7,7 @@ from enum import Enum
 from functools import partial
 from operator import getitem, setitem
 from typing import (
-    cast,
-    overload,
+    TYPE_CHECKING,
     Any,
     Callable,
     Dict,
@@ -19,10 +18,10 @@ from typing import (
     Protocol,
     Tuple,
     TypeVar,
-    TYPE_CHECKING,
     Union,
+    cast,
+    overload,
 )
-
 
 T = TypeVar("T", bound="CPU")
 Registers = Dict[str, int]
@@ -38,7 +37,7 @@ class Halt(Exception):
 
 class Memory(List[int]):
     def _grow(self, target: int) -> None:
-        assert target + 1 < 2 ** 16, f"Asking for too much memory: {target}"
+        assert target + 1 < 2**16, f"Asking for too much memory: {target}"
         self.extend([0] * (target + 1 - len(self)))
 
     @overload
@@ -145,7 +144,7 @@ class InstructionBase(ABC, _InstructionBaseFields):
         modes = opcode // 100
         return BoundInstruction(
             self,
-            tuple(ParameterMode(modes // (10 ** i) % 10) for i in range(paramcount)),
+            tuple(ParameterMode(modes // (10**i) % 10) for i in range(paramcount)),
             cpu.pos + 1,
             cpu,
         )
@@ -276,7 +275,8 @@ def ioset(
 
 
 def ioset(
-    *inputs: Union[int, Iterable[int]], opcodes: Optional[InstructionSet] = None,
+    *inputs: Union[int, Iterable[int]],
+    opcodes: Optional[InstructionSet] = None,
 ) -> Tuple[List[int], InstructionSet]:
     """Create an output list and instructionset with given input"""
     if opcodes is None:
