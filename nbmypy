@@ -1,9 +1,0 @@
-#!/bin/bash
-export MYPYPATH=`dirname "$1"`
-mypy <( 
-    jupyter nbconvert "$1" \
-    --to python --stdout \
-    --PythonExporter.exclude_markdown=True \
-    --PythonExporter.exclude_input_prompt=True \
-    --TagRemovePreprocessor.remove_cell_tags=noexport \
-)

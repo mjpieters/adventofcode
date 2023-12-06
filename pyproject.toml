@@ -27,8 +27,8 @@ easing-functions = "*"
 
 
 [tool.poetry.group.dev.dependencies]
-mypy = "*"
 ruff = "^0.1.6"
+pyright = "^1.1.339"
 
 
 [tool.ruff]
@@ -38,6 +38,12 @@ ignore = ["E402", "E501"]
 unfixable = ["B"]
 line-length = 88
 select = ["B", "E", "F", "W", "B9"]
+
+
+[tool.pyright]
+include = ["."]
+exclude = ["2015", "2016"]
+ignore = ["jupyter_notebook_config.py"]
 
 
 [build-system]
