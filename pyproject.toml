@@ -17,7 +17,6 @@ numpy = "*"
 pillow = "*"
 marshmallow = "*"
 matplotlib = "*"
-advent-of-code-data = "*"
 scipy = "*"
 astor = "*"
 sympy = "*"
@@ -25,6 +24,11 @@ regex = "*"
 requests = "*"
 easing-functions = "*"
 
+[tool.poetry.dependencies.advent-of-code-data]
+# Commit that provides type hints for the library, use until
+# new release is made available.
+"git"="https://github.com/wimglenn/advent-of-code-data.git"
+"rev"="40d1ef7c99bf26bc5cc60cc6e2aaf2e6054ff596"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
@@ -44,6 +48,7 @@ select = ["B", "E", "F", "W", "B9"]
 include = ["."]
 exclude = ["2015", "2016"]
 ignore = ["jupyter_notebook_config.py"]
+strict = ["2023"]
 # pyright 1.1.339 "standard" mode, manually applied until pylance includes that version
 reportFunctionMemberAccess = "error"
 reportIncompatibleMethodOverride = "error"
