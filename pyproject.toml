@@ -28,7 +28,7 @@ easing-functions = "*"
 # Commit that provides type hints for the library, use until
 # new release is made available.
 "git"="https://github.com/wimglenn/advent-of-code-data.git"
-"rev"="40d1ef7c99bf26bc5cc60cc6e2aaf2e6054ff596"
+"rev"="9a0a72f1eb7178a6f6901e1879ebbad82689b93c"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
